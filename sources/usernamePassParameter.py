@@ -1,7 +1,3 @@
-import requests
-from globals import global_req_timeout
-
-
 class UsernamePassParameter:
     def __init__(self, username_param_name, password_param_name, username_to_try, other_params_dict=None):
         self.username_to_try = username_to_try

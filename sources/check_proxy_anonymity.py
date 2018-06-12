@@ -1,8 +1,8 @@
 import threading
 import time
-import proxy
-import misc
-from queue_list_functions import generate_list_from_file
+import sources.proxy as proxy
+import sources.misc as misc
+from sources.queue_list_functions import generate_list_from_file
 
 begin_time = time.time()
 

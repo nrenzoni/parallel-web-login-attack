@@ -3,8 +3,6 @@ import socket
 from contextlib import closing
 from termcolor import colored
 
-from globals import global_req_timeout
-
 
 # https://stackoverflow.com/a/35370008
 def is_port_open(ip, port):

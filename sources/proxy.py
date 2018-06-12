@@ -1,10 +1,10 @@
 import re
 
-from requests import get, Timeout, request
+from requests import get, request
 from random import shuffle
-from globals import global_req_timeout
-from misc import is_port_open
-from queue_list_functions import generate_list_from_file
+from sources.globals import global_req_timeout
+from sources.misc import is_port_open
+from sources.queue_list_functions import generate_list_from_file
 
 user_agent = 'smarty pants 1.0'
 

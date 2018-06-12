@@ -2,9 +2,9 @@ import threading
 from queue import Queue
 
 from requests import exceptions, Response
-from proxy import Proxy
-import misc
-from usernamePassParameter import UsernamePassParameter
+from sources.proxy import Proxy
+import sources.misc as misc
+from sources.usernamePassParameter import UsernamePassParameter
 
 
 # each worker queues polls proxy queue for an available proxy, and then polls password queue

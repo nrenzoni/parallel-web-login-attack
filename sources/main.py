@@ -2,12 +2,12 @@ import threading
 import argparse
 import time
 
-import misc
-from queue_list_functions import *
-import bruteforcer
-import proxy
-from usernamePassParameter import UsernamePassParameter
-import scrape_online_proxies.proxy_listen_dot_de
+import sources.misc as misc
+from sources.queue_list_functions import *
+import sources.bruteforcer as bruteforcer
+import sources.proxy as proxy
+from sources.usernamePassParameter import UsernamePassParameter
+import sources.scrape_online_proxies.proxy_listen_dot_de as proxy_listen_dot_de
 
 
 def args_setup():
@@ -37,7 +37,7 @@ def main():
     if args.proxy_list:
         proxy_obj_list = proxy.parse_proxy_list_from_file(args.proxy_list)
     else:
-        proxy_obj_list = scrape_online_proxies.proxy_listen_dot_de.scrape(get_global_proxy_type_list=True)
+        proxy_obj_list = proxy_listen_dot_de.scrape(get_global_proxy_type_list=True)
     proxies_q = list_to_queue(proxy_obj_list)
 
     thread_list = []
