@@ -89,7 +89,6 @@ def main():
     for t in thread_list:
         t.join()
 
-    # possible that brute-force threads finished without finding password; if event set, password found
     if found_password_q.qsize() > 0:
         try:
             username, password = found_password_q.get(block=False)

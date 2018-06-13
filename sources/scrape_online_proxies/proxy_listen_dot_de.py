@@ -1,6 +1,7 @@
 """
-scrape https, socks4, and socks5 proxies from https://www.proxy-listen.de/Proxy/Proxyliste.html
-in same format / api as this file (parse() function), can create scrapers for other websites which list proxies
+scrape https (http proxy supporting CONNECT tunnel), socks4, and socks5 proxies from
+https://www.proxy-listen.de/Proxy/Proxyliste.html.
+using same format / api as this file (parse() function), can create scrapers for other websites which list proxies
 """
 
 
