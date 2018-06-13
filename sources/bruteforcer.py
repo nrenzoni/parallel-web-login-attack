@@ -1,10 +1,11 @@
 import threading
 from queue import Queue
+from time import sleep
 
 from requests import exceptions, Response
-from sources.proxy import Proxy
-import sources.misc as misc
-from sources.usernamePassParameter import UsernamePassParameter
+from proxy import Proxy
+import misc
+from usernamePassParameter import UsernamePassParameter
 
 
 # each worker queues polls proxy queue for an available proxy, and then polls password queue
@@ -54,7 +55,8 @@ class Worker(threading.Thread):
         # if fails (dead proxy, blocked ip), retry password with different proxy.
         # continue in infinite loop as long as stop_event not set, or break when pswd queue is empty and finished
 
-        misc.print_stat('{} worker thread starting'.format(self.thread_name), 'magenta')
+        misc.print_stat('{} worker thread starting...'.format(self.thread_name), 'magenta')
+        sleep(1)
 
         self.current_proxy: Proxy = self.proxy_q.get()
         self.proxy_q.task_done()
@@ -112,5 +114,6 @@ class Worker(threading.Thread):
             self.found_password_q.put((self.username_pswd_param.username_to_try, self.current_password))
             self.stop_event.set()
             misc.print_positive('response size: {}'.format(resp_size))
+            misc.print_positive('password: {}\nresponse: {}'.format(self.current_password, resp.text))
         else:
             misc.print_error('tried password: "{}", response size: {}'.format(self.current_password, resp_size))

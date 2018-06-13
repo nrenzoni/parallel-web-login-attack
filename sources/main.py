@@ -2,12 +2,12 @@ import threading
 import argparse
 import time
 
-import sources.misc as misc
-from sources.queue_list_functions import *
-import sources.bruteforcer as bruteforcer
-import sources.proxy as proxy
-from sources.usernamePassParameter import UsernamePassParameter
-import sources.scrape_online_proxies.proxy_listen_dot_de as proxy_listen_dot_de
+import misc
+from scrape_online_proxies import proxy_listen_dot_de
+from queue_list_functions import *
+import bruteforcer
+import proxy
+from usernamePassParameter import UsernamePassParameter
 
 
 def args_setup():
@@ -74,19 +74,23 @@ def main():
         thread_list.append(w)
         w.start()
 
-    while True:
-        if misc.all_threads_still_running(thread_list):
-            time.sleep(5)
-            misc.print_stat('passwords tried so far: {:3} runtime: {}'.format(tried_password_counter.value,
-                                                                              time.time()-start_time), 'magenta')
-        else:
-            break
+    try:
+        while True:
+            if misc.all_threads_still_running(thread_list):
+                time.sleep(5)
+                misc.print_stat('{} passwords tried so far in {:.0f} seconds'.format(
+                    tried_password_counter.value, time.time()-start_time), 'magenta')
+            else:
+                break
+    except KeyboardInterrupt:
+        misc.print_stat('closing...', 'magenta')
+        stop_event.set()  # signal to stop threads if cntrl-c caught
 
     for t in thread_list:
         t.join()
 
     # possible that brute-force threads finished without finding password; if event set, password found
-    if stop_event.is_set():
+    if found_password_q.qsize() > 0:
         try:
             username, password = found_password_q.get(block=False)
             misc.print_positive('password: "{}" found for username: "{}"'.format(password, username))
@@ -94,7 +98,7 @@ def main():
             misc.print_error('error retrieving password from password_queue in main thread')
     else:
         misc.print_error('password was not found')
-    misc.print_stat('total runtime: {} seconds '.format(time.time() - start_time))
+    misc.print_stat('total runtime: {:.0f} seconds '.format(time.time() - start_time))
 
     dead_proxy_file_name = '../data/dead_proxies.txt'
     with open(dead_proxy_file_name, 'w') as f:

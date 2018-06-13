@@ -9,6 +9,8 @@ from lxml import html
 import proxy
 import re
 
+from globals import global_req_timeout
+
 
 class Proxy:
     def __init__(self, ip, port, reaction_time, online_percent, proxy_type, is_gateway=None):
@@ -67,7 +69,7 @@ def extract_hidden_post_data():
                 headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, '
                                        'like Gecko) Chrome/67.0.3396.79 Safari/537.36'}, verify=False)
     matches = re.findall(r'<input\s+name="(.+?)"\s+value="(.+?)" .+?"hidden"/>', r.text)
-    if len(matches) != 1 and len(matches[0] != 2):
+    if len(matches) != 1 or len(matches[0] != 2):
         raise Exception("mismatch in finding hidden post data")
     return matches[0]  # (hidden_post_key, hidden_post_data)
 
@@ -102,7 +104,7 @@ def make_request(proxy_type, next_page, hidden_post_data_tuple):
         post_data['submit'] = 'Show'
 
     return request('post', url='https://www.proxy-listen.de/Proxy/Proxyliste.html', headers=custom_headers,
-                   data=post_data, verify=False)
+                   data=post_data, verify=False, timeout=global_req_timeout)
 
 
 def scrape(get_global_proxy_type_list=False):
